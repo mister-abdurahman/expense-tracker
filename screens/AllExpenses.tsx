@@ -4,10 +4,25 @@ import SubHeader from "../components/SubHeader";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseItem from "../components/ExpenseItem";
 import { ExpenseContext } from "../store/context";
-import { useContext } from "react";
+import { useContext, useLayoutEffect } from "react";
+import Entypo from "@expo/vector-icons/Entypo";
 
-function AllExpenses() {
+function AllExpenses({ navigation }) {
   const { expenses } = useContext(ExpenseContext);
+
+  useLayoutEffect(function () {
+    navigation.setOptions({
+      headerRight: () => (
+        <Entypo
+          name="plus"
+          size={30}
+          color={Colors.white}
+          onPress={() => navigation.navigate("CreateExpense")}
+        />
+      ),
+    });
+  }, []);
+
   return (
     <View style={styles.screen}>
       <SubHeader filterText="Total" price={450.2} />

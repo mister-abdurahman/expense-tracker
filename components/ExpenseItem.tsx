@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import Colors from "../constants/Colors";
 import { EachExpense } from "../store/context";
+import { useNavigation } from "@react-navigation/native";
 
 function ExpenseItem({ data }: { data: EachExpense }) {
   const { title, price, date } = data;
+  const navigation:any = useNavigation()
   return (
     <Pressable
       style={({ pressed }) => [
@@ -11,6 +13,7 @@ function ExpenseItem({ data }: { data: EachExpense }) {
         pressed ? { opacity: 0.65 } : null,
       ]}
       android_ripple={{ color: Colors.lightblue }}
+      onPress={()=> navigation.navigate('EditExpense', {id: data.id})}
     >
       <View>
         <Text style={styles.title}>{title}</Text>

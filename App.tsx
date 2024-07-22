@@ -67,8 +67,16 @@ export default function App() {
               component={BottomTabsNavigator}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="CreateExpense" component={CreateExpense} />
-            <Stack.Screen name="EditExpense" component={EditExpense} />
+            <Stack.Screen
+              name="CreateExpense"
+              component={CreateExpense}
+              options={{ title: "Create Expense" }}
+            />
+            <Stack.Screen
+              name="EditExpense"
+              component={EditExpense}
+              options={{ title: "Edit Expense" }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </ExpenseContextProvider>

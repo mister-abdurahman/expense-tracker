@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Button } from "react-native";
 import Colors from "../constants/Colors";
 import { useContext, useLayoutEffect } from "react";
-import Entypo from "@expo/vector-icons/Entypo";
 import SubHeader from "../components/SubHeader";
 import ExpenseItem from "../components/ExpenseItem";
 import ExpenseList from "../components/ExpenseList";
 import { ExpenseContext } from "../store/context";
+import Entypo from "@expo/vector-icons/Entypo";
 
 function RecentExpenses({ navigation }) {
   const { expenses } = useContext(ExpenseContext);
