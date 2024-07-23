@@ -1,9 +1,9 @@
 export class Expense {
   id: number;
   title: string;
-  date: string;
+  date: Date;
   price: number;
-  constructor(id: number, title: string, date: string, price: number) {
+  constructor(id: number, title: string, date: Date, price: number) {
     this.id = id;
     this.title = title;
     this.date = date;

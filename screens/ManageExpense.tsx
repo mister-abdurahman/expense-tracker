@@ -1,28 +1,42 @@
 import { View, Text, StyleSheet, Pressable, TextInput } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Colors from "../constants/Colors";
-import { useContext, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { ExpenseContext } from "../store/context";
+import Button from "../components/Button";
 
-function CreateExpense({ navigation }: { navigation: any }) {
-  const { expenses, addExpense } = useContext(ExpenseContext);
+function ManageExpense({ route, navigation }) {
+  const { expenses, updateExpense, removeExpense } = useContext(ExpenseContext);
+  const id = route.params?.id;
 
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [price, setPrice] = useState("");
+  const isEditing = !!id;
 
-  function handleCreate() {
+  const expense = expenses.find((exp) => exp.id === id);
+  const [title, setTitle] = useState(expense?.title);
+  const [date, setDate] = useState(expense?.date);
+  const [price, setPrice] = useState(`${expense?.price}`);
+
+  useLayoutEffect(function () {
+    navigation.setOptions({
+      title: isEditing ? "Edit Expense" : "Create Expense",
+    });
+  }, []);
+
+  function handleUpdate() {
     if (!title || !date || !price) return;
     const data = {
-      id: Math.floor(Math.random() + Math.random() * 5),
+      id,
       title,
       date,
       price: Number(price),
     };
-    addExpense(data);
+    updateExpense(data);
     navigation.goBack();
   }
-
+  function handleDelete() {
+    removeExpense(id);
+    navigation.goBack();
+  }
   return (
     <View style={styles.container}>
       <View style={styles.formBox}>
@@ -53,13 +67,26 @@ function CreateExpense({ navigation }: { navigation: any }) {
         </View>
       </View>
       <View style={styles.btnsContainer}>
-        <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
-          <Text style={styles.cancelBtnText}>Cancel</Text>
-        </Pressable>
-        <Pressable style={styles.updateBtn} onPress={handleCreate}>
-          <Text style={styles.updateBtnText}>Create</Text>
-        </Pressable>
+        <Button
+          text="Cancel"
+          mode="outline"
+          pressAction={() => navigation.goBack()}
+        />
+        <Button
+          text={isEditing ? "Update" : "Create"}
+          pressAction={handleUpdate}
+        />
       </View>
+      {isEditing && (
+        <View style={styles.iconContainer}>
+          <AntDesign
+            name="delete"
+            size={36}
+            color={"red"}
+            onPress={handleDelete}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -113,6 +140,9 @@ const styles = StyleSheet.create({
   updateBtnText: {
     color: Colors.white,
   },
+  iconContainer: {
+    alignItems: "center",
+  },
 });
 
-export default CreateExpense;
+export default ManageExpense;

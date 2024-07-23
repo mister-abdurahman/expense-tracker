@@ -4,7 +4,7 @@ import { ExpenseData } from "../data/dummy-data";
 export interface EachExpense {
   id: number;
   title: string;
-  date: string;
+  date: Date;
   price: number;
 }
 
@@ -12,14 +12,14 @@ interface Props {
   expenses: EachExpense[];
   addExpense: (x: EachExpense) => void;
   removeExpense: (x: number) => void;
-  editExpense: (x: EachExpense) => void;
+  updateExpense: (x: EachExpense) => void;
 }
 
 export const ExpenseContext = createContext<Props>({
   expenses: [],
   addExpense: () => null,
   removeExpense: () => null,
-  editExpense: () => null,
+  updateExpense: () => null,
 });
 
 export const ExpenseContextProvider = function ({
@@ -36,16 +36,16 @@ export const ExpenseContextProvider = function ({
   function removeExpense(id: number) {
     setExpenses((prev) => prev.filter((el) => el.id !== id));
   }
-  function editExpense(data: EachExpense) {
+  function updateExpense(data: EachExpense) {
     setExpenses((prev) => {
       const oldData = prev.filter((el) => el.id !== data.id);
-      return { ...oldData, data };
+      return [...oldData, data];
     });
   }
 
   return (
     <ExpenseContext.Provider
-      value={{ expenses, addExpense, removeExpense, editExpense }}
+      value={{ expenses, addExpense, removeExpense, updateExpense }}
     >
       {children}
     </ExpenseContext.Provider>

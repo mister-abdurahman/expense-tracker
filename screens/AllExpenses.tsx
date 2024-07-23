@@ -7,7 +7,7 @@ import { ExpenseContext } from "../store/context";
 import { useContext, useLayoutEffect } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 
-function AllExpenses({ navigation }) {
+function AllExpenses({ navigation }: { navigation: any }) {
   const { expenses } = useContext(ExpenseContext);
 
   useLayoutEffect(function () {
@@ -17,19 +17,22 @@ function AllExpenses({ navigation }) {
           name="plus"
           size={30}
           color={Colors.white}
-          onPress={() => navigation.navigate("CreateExpense")}
+          onPress={() => navigation.navigate("ManageExpense")}
         />
       ),
     });
   }, []);
 
+  const total = expenses.reduce((acc, cur) => acc + cur.price, 0).toFixed(2);
+
   return (
     <View style={styles.screen}>
-      <SubHeader filterText="Total" price={450.2} />
+      <SubHeader filterText="Total" price={Number(total)} />
       <ExpenseList data={expenses} />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.lightblue,

@@ -5,11 +5,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RecentExpenses from "./screens/RecentExpenses";
 import CreateExpense from "./screens/CreateExpense";
-import EditExpense from "./screens/EditExpense";
+import EditExpense from "./screens/ManageExpense";
 import AllExpenses from "./screens/AllExpenses";
 import Colors from "./constants/Colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { ExpenseContextProvider } from "./store/context";
+import ManageExpense from "./screens/ManageExpense";
 
 const BottomTabs = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -67,15 +68,15 @@ export default function App() {
               component={BottomTabsNavigator}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="CreateExpense"
               component={CreateExpense}
               options={{ title: "Create Expense" }}
-            />
+            /> */}
             <Stack.Screen
-              name="EditExpense"
-              component={EditExpense}
-              options={{ title: "Edit Expense" }}
+              name="ManageExpense"
+              component={ManageExpense}
+              options={{ presentation: "modal" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -2,10 +2,11 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import Colors from "../constants/Colors";
 import { EachExpense } from "../store/context";
 import { useNavigation } from "@react-navigation/native";
+import { formatDate } from "../utils/formatDate";
 
 function ExpenseItem({ data }: { data: EachExpense }) {
   const { title, price, date } = data;
-  const navigation:any = useNavigation()
+  const navigation: any = useNavigation();
   return (
     <Pressable
       style={({ pressed }) => [
@@ -13,11 +14,11 @@ function ExpenseItem({ data }: { data: EachExpense }) {
         pressed ? { opacity: 0.65 } : null,
       ]}
       android_ripple={{ color: Colors.lightblue }}
-      onPress={()=> navigation.navigate('EditExpense', {id: data.id})}
+      onPress={() => navigation.navigate("ManageExpense", { id: data.id })}
     >
       <View>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.date}>{formatDate(date)}</Text>
       </View>
       <View style={styles.price_box}>
         <Text style={styles.price_text}>{price}</Text>
@@ -47,8 +48,11 @@ const styles = StyleSheet.create({
   price_box: {
     backgroundColor: Colors.white,
     borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    // paddingHorizontal: 16,
+    // paddingVertical: 10,
+    minWidth: 65,
+    justifyContent: "center",
+    alignItems: "center",
   },
   price_text: {
     fontWeight: "bold",
