@@ -6,4 +6,5 @@ export const ExpenseData = [
   new Expense(3, "New Phone", new Date("2022-05-18"), 14.66),
   new Expense(4, "Big Lunch", new Date("2022-05-02"), 14.66),
   new Expense(5, "Trip", new Date("2022-06-01"), 14.66),
+  new Expense(6, "Perfume", new Date("2024-07-20"), 14.66),
 ];

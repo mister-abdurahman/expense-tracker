@@ -28,7 +28,11 @@ function AllExpenses({ navigation }: { navigation: any }) {
   return (
     <View style={styles.screen}>
       <SubHeader filterText="Total" price={Number(total)} />
-      <ExpenseList data={expenses} />
+      {expenses.length ? (
+        <ExpenseList data={expenses} />
+      ) : (
+        <Text style={styles.noExpenseMsg}>No Expense To display</Text>
+      )}
     </View>
   );
 }
@@ -39,6 +43,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 14,
     flex: 1,
+  },
+  noExpenseMsg: {
+    fontWeight: "bold",
+    textAlign: "center",
+    color: Colors.blue,
   },
 });
 

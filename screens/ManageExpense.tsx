@@ -6,15 +6,16 @@ import { ExpenseContext } from "../store/context";
 import Button from "../components/Button";
 
 function ManageExpense({ route, navigation }) {
-  const { expenses, updateExpense, removeExpense } = useContext(ExpenseContext);
+  const { expenses, updateExpense, removeExpense, addExpense } =
+    useContext(ExpenseContext);
   const id = route.params?.id;
 
   const isEditing = !!id;
 
   const expense = expenses.find((exp) => exp.id === id);
   const [title, setTitle] = useState(expense?.title);
-  const [date, setDate] = useState(expense?.date);
-  const [price, setPrice] = useState(`${expense?.price}`);
+  const [date, setDate] = useState(`${expense?.date || ""}`);
+  const [price, setPrice] = useState(`${expense?.price || ""}`);
 
   useLayoutEffect(function () {
     navigation.setOptions({
@@ -27,10 +28,10 @@ function ManageExpense({ route, navigation }) {
     const data = {
       id,
       title,
-      date,
+      date: new Date(date),
       price: Number(price),
     };
-    updateExpense(data);
+    isEditing ? updateExpense(data) : addExpense(data);
     navigation.goBack();
   }
   function handleDelete() {
