@@ -7,17 +7,17 @@ import { ExpenseContext } from "../store/context";
 function CreateExpense({ navigation }: { navigation: any }) {
   const { expenses, addExpense } = useContext(ExpenseContext);
 
-  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
-  const [price, setPrice] = useState("");
+  const [amount, setAmount] = useState("");
 
   function handleCreate() {
-    if (!title || !date || !price) return;
+    if (!description || !date || !amount) return;
     const data = {
       id: Math.floor(Math.random() + Math.random() * 5),
-      title,
+      description,
       date,
-      price: Number(price),
+      amount: Number(amount),
     };
     addExpense(data);
     navigation.goBack();
@@ -27,11 +27,11 @@ function CreateExpense({ navigation }: { navigation: any }) {
     <View style={styles.container}>
       <View style={styles.formBox}>
         <View style={styles.formHorizontalInput}>
-          <Text>Title:</Text>
+          <Text>Description:</Text>
           <TextInput
             style={styles.input}
-            defaultValue={title}
-            onChangeText={(text) => setTitle(text)}
+            defaultValue={description}
+            onChangeText={(text) => setDescription(text)}
           />
         </View>
         <View style={styles.formHorizontalInput}>
@@ -43,12 +43,12 @@ function CreateExpense({ navigation }: { navigation: any }) {
           />
         </View>
         <View style={styles.formHorizontalInput}>
-          <Text>Price:</Text>
+          <Text>Amount:</Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            defaultValue={price}
-            onChangeText={(text) => setPrice(text)}
+            defaultValue={amount}
+            onChangeText={(text) => setAmount(text)}
           />
         </View>
       </View>

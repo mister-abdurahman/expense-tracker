@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
-import SubHeader from "../components/SubHeader";
-import ExpenseList from "../components/ExpenseList";
-import ExpenseItem from "../components/ExpenseItem";
+import SubHeader from "../components/ExpensesOuput/SubHeader";
+import ExpenseList from "../components/ExpensesOuput/ExpenseList";
+import ExpenseItem from "../components/ExpensesOuput/ExpenseItem";
 import { ExpenseContext } from "../store/context";
 import { useContext, useLayoutEffect } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -23,11 +23,11 @@ function AllExpenses({ navigation }: { navigation: any }) {
     });
   }, []);
 
-  const total = expenses.reduce((acc, cur) => acc + cur.price, 0).toFixed(2);
+  const total = expenses.reduce((acc, cur) => acc + cur.amount, 0).toFixed(2);
 
   return (
     <View style={styles.screen}>
-      <SubHeader filterText="Total" price={Number(total)} />
+      <SubHeader filterText="Total" amount={Number(total)} />
       {expenses.length ? (
         <ExpenseList data={expenses} />
       ) : (
@@ -39,7 +39,7 @@ function AllExpenses({ navigation }: { navigation: any }) {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: Colors.lightblue,
+    backgroundColor: Colors.darkblue,
     paddingHorizontal: 24,
     paddingVertical: 14,
     flex: 1,

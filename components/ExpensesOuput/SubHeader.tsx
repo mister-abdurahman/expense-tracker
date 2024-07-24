@@ -1,23 +1,23 @@
 import { View, Text, StyleSheet } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
 
 function SubHeader({
   filterText,
-  price,
+  amount,
 }: {
   filterText: string;
-  price: number;
+  amount: number;
 }) {
   return (
     <View style={styles.subHeader}>
       <Text style={styles.subHeader_leftText}>{filterText}</Text>
-      <Text style={styles.subHeader_rightText}>${price}</Text>
+      <Text style={styles.subHeader_rightText}>${amount}</Text>
     </View>
   );
 }
 const styles = StyleSheet.create({
   subHeader: {
-    backgroundColor: Colors.slate,
+    backgroundColor: Colors.lightblue,
     borderRadius: 8,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   subHeader_leftText: {
-    color: Colors.blue,
+    color: Colors.darkerblue,
     fontWeight: "light",
   },
   subHeader_rightText: {
-    color: Colors.blue,
+    color: Colors.darkerblue,
     fontWeight: "bold",
   },
 });

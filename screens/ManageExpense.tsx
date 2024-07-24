@@ -3,7 +3,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Colors from "../constants/Colors";
 import { useContext, useLayoutEffect, useState } from "react";
 import { ExpenseContext } from "../store/context";
-import Button from "../components/Button";
+import Button from "../components/UI/Button";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 function ManageExpense({ route, navigation }) {
   const { expenses, updateExpense, removeExpense, addExpense } =
@@ -13,9 +14,9 @@ function ManageExpense({ route, navigation }) {
   const isEditing = !!id;
 
   const expense = expenses.find((exp) => exp.id === id);
-  const [title, setTitle] = useState(expense?.title);
+  const [description, setDescription] = useState(expense?.description);
   const [date, setDate] = useState(`${expense?.date || ""}`);
-  const [price, setPrice] = useState(`${expense?.price || ""}`);
+  const [amount, setAmount] = useState(`${expense?.amount || ""}`);
 
   useLayoutEffect(function () {
     navigation.setOptions({
@@ -24,12 +25,12 @@ function ManageExpense({ route, navigation }) {
   }, []);
 
   function handleUpdate() {
-    if (!title || !date || !price) return;
+    if (!description || !date || !amount) return;
     const data = {
       id,
-      title,
+      description,
       date: new Date(date),
-      price: Number(price),
+      amount: Number(amount),
     };
     isEditing ? updateExpense(data) : addExpense(data);
     navigation.goBack();
@@ -40,13 +41,15 @@ function ManageExpense({ route, navigation }) {
   }
   return (
     <View style={styles.container}>
-      <View style={styles.formBox}>
+      <Text style={styles.subHeader}>Your Expense</Text>
+      <ExpenseForm />
+      {/* <View style={styles.formBox}>
         <View style={styles.formHorizontalInput}>
-          <Text>Title:</Text>
+          <Text>Description:</Text>
           <TextInput
             style={styles.input}
-            defaultValue={title}
-            onChangeText={(text) => setTitle(text)}
+            defaultValue={description}
+            onChangeText={(text) => setDescription(text)}
           />
         </View>
         <View style={styles.formHorizontalInput}>
@@ -58,15 +61,15 @@ function ManageExpense({ route, navigation }) {
           />
         </View>
         <View style={styles.formHorizontalInput}>
-          <Text>Price:</Text>
+          <Text>Amount:</Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            defaultValue={price}
-            onChangeText={(text) => setPrice(text)}
+            defaultValue={amount}
+            onChangeText={(text) => setAmount(text)}
           />
         </View>
-      </View>
+      </View> */}
       <View style={styles.btnsContainer}>
         <Button
           text="Cancel"
@@ -93,7 +96,15 @@ function ManageExpense({ route, navigation }) {
 }
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 24,
+    marginHorizontal: 14,
+    marginTop: 24,
+  },
+  subHeader: {
+    fontWeight: "bold",
+    fontSize: 24,
+    textAlign: "center",
+    color: Colors.slate,
+    marginVertical: 16,
   },
   formBox: {
     backgroundColor: Colors.white,
@@ -121,6 +132,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 5,
     borderBottomColor: Colors.white,
     paddingBottom: 18,
+    marginHorizontal: 24,
   },
   cancelBtn: {
     paddingHorizontal: 28,

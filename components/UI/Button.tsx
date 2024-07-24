@@ -1,5 +1,5 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
 
 function Button({
   text,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.darkerblue,
   },
   fillBtnText: {
     color: Colors.white,
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     paddingVertical: 10,
     borderWidth: 4,
-    borderColor: Colors.blue,
+    borderColor: Colors.darkerblue,
     borderRadius: 6,
-    backgroundColor: Colors.lightblue,
+    backgroundColor: Colors.white,
   },
   outlineBtnText: {
-    color: Colors.blue,
+    color: Colors.darkerblue,
   },
 });
 

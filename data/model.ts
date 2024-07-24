@@ -1,12 +1,12 @@
 export class Expense {
   id: number;
-  title: string;
+  description: string;
   date: Date;
-  price: number;
-  constructor(id: number, title: string, date: Date, price: number) {
+  amount: number;
+  constructor(id: number, description: string, date: Date, amount: number) {
     this.id = id;
-    this.title = title;
+    this.description = description;
     this.date = date;
-    this.price = price;
+    this.amount = amount;
   }
 }

@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import Colors from "../constants/Colors";
-import { EachExpense } from "../store/context";
+import Colors from "../../constants/Colors";
+import { EachExpense } from "../../store/context";
 import { useNavigation } from "@react-navigation/native";
-import { formatDate } from "../utils/formatDate";
+import { formatDate } from "../../utils/formatDate";
 
 function ExpenseItem({ data }: { data: EachExpense }) {
-  const { title, price, date } = data;
+  const { description, amount, date } = data;
   const navigation: any = useNavigation();
   return (
     <Pressable
@@ -17,18 +17,18 @@ function ExpenseItem({ data }: { data: EachExpense }) {
       onPress={() => navigation.navigate("ManageExpense", { id: data.id })}
     >
       <View>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
         <Text style={styles.date}>{formatDate(date)}</Text>
       </View>
-      <View style={styles.price_box}>
-        <Text style={styles.price_text}>{price}</Text>
+      <View style={styles.amount_box}>
+        <Text style={styles.amount_text}>{amount}</Text>
       </View>
     </Pressable>
   );
 }
 const styles = StyleSheet.create({
   pressable_box: {
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.darkerblue,
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 14,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   left_box: {},
-  title: {
+  description: {
     fontWeight: "bold",
     color: Colors.white,
   },
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     fontWeight: "thin",
     color: Colors.white,
   },
-  price_box: {
+  amount_box: {
     backgroundColor: Colors.white,
     borderRadius: 8,
     // paddingHorizontal: 16,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  price_text: {
+  amount_text: {
     fontWeight: "bold",
     color: Colors.blue,
   },

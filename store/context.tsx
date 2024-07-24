@@ -3,9 +3,9 @@ import { ExpenseData } from "../data/dummy-data";
 
 export interface EachExpense {
   id: number;
-  title: string;
+  description: string;
   date: Date;
-  price: number;
+  amount: number;
 }
 
 interface Props {

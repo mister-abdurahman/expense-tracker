@@ -19,11 +19,11 @@ function BottomTabsNavigator() {
   return (
     <BottomTabs.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.blue },
+        headerStyle: { backgroundColor: Colors.darkerblue },
         headerTintColor: Colors.white,
-        tabBarActiveBackgroundColor: Colors.blue,
+        tabBarActiveBackgroundColor: Colors.darkerblue,
         tabBarActiveTintColor: Colors.white,
-        tabBarInactiveTintColor: Colors.blue,
+        tabBarInactiveTintColor: Colors.darkerblue,
       }}
     >
       <BottomTabs.Screen
@@ -58,9 +58,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
-              headerStyle: { backgroundColor: Colors.blue },
+              headerStyle: { backgroundColor: Colors.darkerblue },
               headerTintColor: Colors.white,
-              contentStyle: { backgroundColor: Colors.lightblue },
+              contentStyle: { backgroundColor: Colors.darkblue },
             }}
           >
             <Stack.Screen
@@ -71,7 +71,7 @@ export default function App() {
             {/* <Stack.Screen
               name="CreateExpense"
               component={CreateExpense}
-              options={{ title: "Create Expense" }}
+              options={{ description: "Create Expense" }}
             /> */}
             <Stack.Screen
               name="ManageExpense"
