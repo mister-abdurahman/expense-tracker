@@ -42,45 +42,7 @@ function ManageExpense({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.subHeader}>Your Expense</Text>
-      <ExpenseForm />
-      {/* <View style={styles.formBox}>
-        <View style={styles.formHorizontalInput}>
-          <Text>Description:</Text>
-          <TextInput
-            style={styles.input}
-            defaultValue={description}
-            onChangeText={(text) => setDescription(text)}
-          />
-        </View>
-        <View style={styles.formHorizontalInput}>
-          <Text>Date:</Text>
-          <TextInput
-            style={styles.input}
-            defaultValue={date}
-            onChangeText={(text) => setDate(text)}
-          />
-        </View>
-        <View style={styles.formHorizontalInput}>
-          <Text>Amount:</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            defaultValue={amount}
-            onChangeText={(text) => setAmount(text)}
-          />
-        </View>
-      </View> */}
-      <View style={styles.btnsContainer}>
-        <Button
-          text="Cancel"
-          mode="outline"
-          pressAction={() => navigation.goBack()}
-        />
-        <Button
-          text={isEditing ? "Update" : "Create"}
-          pressAction={handleUpdate}
-        />
-      </View>
+      <ExpenseForm submitBtnLabel={isEditing ? "Update" : "Create"} />
       {isEditing && (
         <View style={styles.iconContainer}>
           <AntDesign
@@ -105,34 +67,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.slate,
     marginVertical: 16,
-  },
-  formBox: {
-    backgroundColor: Colors.white,
-    padding: 16,
-    borderRadius: 12,
-    marginTop: 28,
-    marginBottom: 10,
-  },
-  formHorizontalInput: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    columnGap: 12,
-  },
-  input: {
-    borderBottomColor: Colors.lightblue,
-    borderBottomWidth: 2,
-    flex: 1,
-  },
-  btnsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    columnGap: 10,
-    marginVertical: 10,
-    borderBottomWidth: 5,
-    borderBottomColor: Colors.white,
-    paddingBottom: 18,
-    marginHorizontal: 24,
   },
   cancelBtn: {
     paddingHorizontal: 28,
