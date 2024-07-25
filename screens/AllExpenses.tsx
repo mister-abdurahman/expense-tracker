@@ -4,11 +4,20 @@ import SubHeader from "../components/ExpensesOuput/SubHeader";
 import ExpenseList from "../components/ExpensesOuput/ExpenseList";
 import ExpenseItem from "../components/ExpensesOuput/ExpenseItem";
 import { ExpenseContext } from "../store/context";
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
+import { getExpenses } from "../utils/http";
 
 function AllExpenses({ navigation }: { navigation: any }) {
   const { expenses } = useContext(ExpenseContext);
+
+  useEffect(function () {
+    async function fetchExpense() {
+      const wex = await getExpenses();
+      console.log(wex);
+    }
+    fetchExpense();
+  }, []);
 
   useLayoutEffect(function () {
     navigation.setOptions({
