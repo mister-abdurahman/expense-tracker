@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Colors from "../constants/Colors";
 import SubHeader from "../components/ExpensesOuput/SubHeader";
 import ExpenseList from "../components/ExpensesOuput/ExpenseList";

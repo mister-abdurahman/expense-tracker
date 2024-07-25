@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
 import { EachExpense } from "../../store/context";
 import ExpenseItem from "./ExpenseItem";
 
@@ -16,7 +16,7 @@ function ExpenseList({ data }: { data: EachExpense[] }) {
 }
 const styles = StyleSheet.create({
   container: {
-    // gap: 8,
+    flex: 1,
   },
 });
 

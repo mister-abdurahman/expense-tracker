@@ -1,42 +1,110 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import Input from "./Input";
 import Colors from "../../constants/Colors";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../UI/Button";
 import { useNavigation } from "@react-navigation/native";
+import { EachExpense, ExpenseContext } from "../../store/context";
+import { formatDate } from "../../utils/formatDate";
+import { createExpense } from "../../utils/http";
 
 interface ExpenseProp {
-  amount: string;
-  description: string;
-  date: string;
+  id: { value: number; isValid: boolean };
+  amount: { value: string; isValid: boolean };
+  description: { value: string; isValid: boolean };
+  date: { value: string; isValid: boolean };
 }
 
-function ExpenseForm({ submitBtnLabel }: { submitBtnLabel: string }) {
-  const [inputValues, setInputValues] = useState({
-    amount: "",
-    description: "",
-    date: "",
+function ExpenseForm({
+  isEditing,
+  defaultValue,
+}: {
+  isEditing: boolean;
+  defaultValue?: EachExpense;
+}) {
+  const { updateExpense, addExpense } = useContext(ExpenseContext);
+  const [inputs, setInputs] = useState({
+    id: {
+      value: defaultValue
+        ? defaultValue?.id
+        : Math.floor(Math.random() * 5) + 3 + Math.floor(Math.random() * 3),
+      isValid: true,
+    },
+    amount: {
+      value: defaultValue ? `${defaultValue?.amount}` : "",
+      isValid: true,
+    },
+    description: {
+      value: defaultValue ? `${defaultValue?.description}` : "",
+      isValid: true,
+    },
+    date: {
+      value: defaultValue ? `${formatDate(defaultValue?.date)}` : "",
+      isValid: true,
+    },
   });
 
   const navigation = useNavigation();
 
   function handleInputChange(inputIdentifier: string, enteredValue?: string) {
-    setInputValues((prev: ExpenseProp) => {
-      return { ...prev, [inputIdentifier]: enteredValue };
+    setInputs((prev: ExpenseProp) => {
+      return {
+        ...prev,
+        [inputIdentifier]: {
+          value: enteredValue,
+          isValid: true,
+        },
+      };
     });
   }
+
   function handleSubmit() {
-    console.log(inputValues);
+    const data = {
+      id: inputs.id.value,
+      amount: Number(inputs.amount.value),
+      description: inputs.description.value,
+      date: new Date(inputs.date.value),
+    };
+
+    const amountIsValid = data.amount > 0 && typeof data.amount === "number";
+    const dateIsValid = data.date.toString() !== "Invalid Date";
+    const descriptionIsValid = data.description.trim().length > 0;
+
+    if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+      return setInputs((prev: ExpenseProp) => {
+        return {
+          id: prev.id,
+          amount: { value: prev.amount.value, isValid: amountIsValid },
+          date: { value: prev.date.value, isValid: dateIsValid },
+          description: {
+            value: prev.description.value,
+            isValid: descriptionIsValid,
+          },
+        };
+      });
+    }
+    //   return Alert.alert("Invalid Input", "Please check your input values");
+
+    isEditing ? updateExpense(data) : addExpense(data);
+    createExpense(data);
+    navigation.goBack();
   }
+
+  const isFormInvalid =
+    !inputs.amount.isValid ||
+    !inputs.date.isValid ||
+    !inputs.description.isValid;
+
   return (
     <View style={styles.formContainer}>
       <View style={{ flexDirection: "row", columnGap: 4 }}>
         <Input
           style={{ flex: 1 }}
           label="Amount"
+          invalid={!inputs.amount.isValid}
           textInputConfig={{
             keyboardType: "decimal-pad",
-            value: inputValues.amount,
+            value: inputs.amount.value,
             onChangeText: (text: string) => handleInputChange("amount", text),
             // onChangeText: handleInputChange.bind(this, "amount"),
           }}
@@ -44,24 +112,32 @@ function ExpenseForm({ submitBtnLabel }: { submitBtnLabel: string }) {
         <Input
           style={{ flex: 1 }}
           label="Date"
+          invalid={!inputs.date.isValid}
           textInputConfig={{
-            placeholder: "YYY-MM-DD",
+            placeholder: "YYYY-MM-DD",
             maxLength: 10,
-            value: inputValues.date,
+            value: inputs.date.value,
             onChangeText: (text: string) => handleInputChange("date", text),
           }}
         />
       </View>
       <Input
         label="Description"
+        invalid={!inputs.description.isValid}
         textInputConfig={{
           multiline: true,
           autoCapitalize: "sentence",
-          value: inputValues.description,
+          value: inputs.description.value,
           onChangeText: (text: string) =>
             handleInputChange("description", text),
         }}
       />
+
+      {isFormInvalid && (
+        <Text style={styles.errorText}>
+          Invalid Value - Please check your input values
+        </Text>
+      )}
 
       <View style={styles.btnsContainer}>
         <Button
@@ -69,14 +145,17 @@ function ExpenseForm({ submitBtnLabel }: { submitBtnLabel: string }) {
           mode="outline"
           pressAction={() => navigation.goBack()}
         />
-        <Button text={submitBtnLabel} pressAction={handleSubmit} />
+        <Button
+          text={isEditing ? "Update" : "Create"}
+          pressAction={handleSubmit}
+        />
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   formContainer: {
-    marginHorizontal: 24,
+    marginHorizontal: 20,
   },
   btnsContainer: {
     flexDirection: "row",
@@ -87,6 +166,10 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.white,
     paddingBottom: 18,
     marginHorizontal: 24,
+  },
+  errorText: {
+    textAlign: "center",
+    color: "red",
   },
 });
 

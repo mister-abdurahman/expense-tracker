@@ -12,7 +12,14 @@ function RecentExpenses({ navigation }) {
   const { expenses } = useContext(ExpenseContext);
   useLayoutEffect(function () {
     navigation.setOptions({
-      headerRight: () => <Entypo name="plus" size={30} color={Colors.white} />,
+      headerRight: () => (
+        <Entypo
+          name="plus"
+          size={30}
+          color={Colors.white}
+          onPress={() => navigation.navigate("ManageExpense")}
+        />
+      ),
     });
   }, []);
 
