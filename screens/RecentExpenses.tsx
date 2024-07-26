@@ -1,15 +1,29 @@
 import { View, Text, StyleSheet, Button } from "react-native";
 import Colors from "../constants/Colors";
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import SubHeader from "../components/ExpensesOuput/SubHeader";
 import ExpenseItem from "../components/ExpensesOuput/ExpenseItem";
 import ExpenseList from "../components/ExpensesOuput/ExpenseList";
 import { ExpenseContext } from "../store/context";
 import Entypo from "@expo/vector-icons/Entypo";
 import { getDateMinusDays } from "../utils/formatDate";
+import { getExpenses } from "../utils/http";
 
 function RecentExpenses({ navigation }) {
-  const { expenses } = useContext(ExpenseContext);
+  const { expenses, setExpensesToRemote } = useContext(ExpenseContext);
+
+  useEffect(function () {
+    async function fetchExpense() {
+      try {
+        const data = await getExpenses();
+        setExpensesToRemote(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchExpense();
+  }, []);
+
   useLayoutEffect(function () {
     navigation.setOptions({
       headerRight: () => (
@@ -53,7 +67,7 @@ const styles = StyleSheet.create({
   noExpenseMsg: {
     fontWeight: "bold",
     textAlign: "center",
-    color: Colors.blue,
+    color: Colors.white,
   },
 });
 

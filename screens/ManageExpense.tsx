@@ -5,6 +5,7 @@ import { useContext, useLayoutEffect, useState } from "react";
 import { EachExpense, ExpenseContext } from "../store/context";
 import Button from "../components/UI/Button";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import { deleteExpense } from "../utils/http";
 
 function ManageExpense({ route, navigation }) {
   const { expenses, updateExpense, removeExpense, addExpense } =
@@ -21,7 +22,8 @@ function ManageExpense({ route, navigation }) {
     });
   }, []);
 
-  function handleDelete() {
+  async function handleDelete() {
+    await deleteExpense(id);
     removeExpense(id);
     navigation.goBack();
   }

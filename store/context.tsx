@@ -2,17 +2,18 @@ import React, { createContext, useState } from "react";
 import { ExpenseData } from "../data/dummy-data";
 
 export interface EachExpense {
-  id: number;
+  id?: string;
   description: string;
-  date: Date;
+  date: Date | string;
   amount: number;
 }
 
 interface Props {
   expenses: EachExpense[];
   addExpense: (x: EachExpense) => void;
-  removeExpense: (x: number) => void;
+  removeExpense: (x: string) => void;
   updateExpense: (x: EachExpense) => void;
+  setExpensesToRemote: (x: EachExpense[]) => void;
 }
 
 export const ExpenseContext = createContext<Props>({
@@ -20,6 +21,7 @@ export const ExpenseContext = createContext<Props>({
   addExpense: () => null,
   removeExpense: () => null,
   updateExpense: () => null,
+  setExpensesToRemote: () => null,
 });
 
 export const ExpenseContextProvider = function ({
@@ -27,13 +29,17 @@ export const ExpenseContextProvider = function ({
 }: {
   children: React.ReactNode;
 }) {
-  const [expenses, setExpenses] = useState(ExpenseData);
+  const [expenses, setExpenses] = useState<EachExpense[]>([]);
   // console.log(expenses);
 
-  function addExpense(data: EachExpense) {
-    setExpenses((prev) => [...prev, data]);
+  function setExpensesToRemote(expenses: EachExpense[]) {
+    const inverted = expenses.reverse();
+    setExpenses(inverted);
   }
-  function removeExpense(id: number) {
+  function addExpense(data: EachExpense) {
+    setExpenses((prev) => [data, ...prev]);
+  }
+  function removeExpense(id: string) {
     setExpenses((prev) => prev.filter((el) => el.id !== id));
   }
   function updateExpense(data: EachExpense) {
@@ -45,7 +51,13 @@ export const ExpenseContextProvider = function ({
 
   return (
     <ExpenseContext.Provider
-      value={{ expenses, addExpense, removeExpense, updateExpense }}
+      value={{
+        expenses,
+        addExpense,
+        removeExpense,
+        updateExpense,
+        setExpensesToRemote,
+      }}
     >
       {children}
     </ExpenseContext.Provider>

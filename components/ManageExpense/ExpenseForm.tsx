@@ -6,10 +6,9 @@ import Button from "../UI/Button";
 import { useNavigation } from "@react-navigation/native";
 import { EachExpense, ExpenseContext } from "../../store/context";
 import { formatDate } from "../../utils/formatDate";
-import { createExpense } from "../../utils/http";
+import { createExpense, updateExpense, deleteExpense } from "../../utils/http";
 
 interface ExpenseProp {
-  id: { value: number; isValid: boolean };
   amount: { value: string; isValid: boolean };
   description: { value: string; isValid: boolean };
   date: { value: string; isValid: boolean };
@@ -22,14 +21,9 @@ function ExpenseForm({
   isEditing: boolean;
   defaultValue?: EachExpense;
 }) {
-  const { updateExpense, addExpense } = useContext(ExpenseContext);
+  const { updateExpense: updateExpenseLocal, addExpense } =
+    useContext(ExpenseContext);
   const [inputs, setInputs] = useState({
-    id: {
-      value: defaultValue
-        ? defaultValue?.id
-        : Math.floor(Math.random() * 5) + 3 + Math.floor(Math.random() * 3),
-      isValid: true,
-    },
     amount: {
       value: defaultValue ? `${defaultValue?.amount}` : "",
       isValid: true,
@@ -46,6 +40,15 @@ function ExpenseForm({
 
   const navigation = useNavigation();
 
+  async function handleUpdateExpense(data: EachExpense) {
+    updateExpenseLocal(data);
+    await updateExpense(data.id, data);
+  }
+  async function handleCreateExpense(data: EachExpense) {
+    const id = await createExpense(data); //remote
+    addExpense({ ...data, id }); //local
+  }
+
   function handleInputChange(inputIdentifier: string, enteredValue?: string) {
     setInputs((prev: ExpenseProp) => {
       return {
@@ -60,7 +63,6 @@ function ExpenseForm({
 
   function handleSubmit() {
     const data = {
-      id: inputs.id.value,
       amount: Number(inputs.amount.value),
       description: inputs.description.value,
       date: new Date(inputs.date.value),
@@ -73,7 +75,6 @@ function ExpenseForm({
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
       return setInputs((prev: ExpenseProp) => {
         return {
-          id: prev.id,
           amount: { value: prev.amount.value, isValid: amountIsValid },
           date: { value: prev.date.value, isValid: dateIsValid },
           description: {
@@ -85,8 +86,7 @@ function ExpenseForm({
     }
     //   return Alert.alert("Invalid Input", "Please check your input values");
 
-    isEditing ? updateExpense(data) : addExpense(data);
-    createExpense(data);
+    isEditing ? handleUpdateExpense(data) : handleCreateExpense(data);
     navigation.goBack();
   }
 

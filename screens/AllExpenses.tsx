@@ -3,18 +3,22 @@ import Colors from "../constants/Colors";
 import SubHeader from "../components/ExpensesOuput/SubHeader";
 import ExpenseList from "../components/ExpensesOuput/ExpenseList";
 import ExpenseItem from "../components/ExpensesOuput/ExpenseItem";
-import { ExpenseContext } from "../store/context";
+import { EachExpense, ExpenseContext } from "../store/context";
 import { useContext, useEffect, useLayoutEffect } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { getExpenses } from "../utils/http";
 
 function AllExpenses({ navigation }: { navigation: any }) {
-  const { expenses } = useContext(ExpenseContext);
+  const { expenses, setExpensesToRemote } = useContext(ExpenseContext);
 
   useEffect(function () {
     async function fetchExpense() {
-      const wex = await getExpenses();
-      console.log(wex);
+      try {
+        const data = await getExpenses();
+        setExpensesToRemote(data);
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchExpense();
   }, []);
@@ -56,7 +60,7 @@ const styles = StyleSheet.create({
   noExpenseMsg: {
     fontWeight: "bold",
     textAlign: "center",
-    color: Colors.blue,
+    color: Colors.white,
   },
 });
 

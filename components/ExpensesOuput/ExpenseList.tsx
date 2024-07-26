@@ -9,7 +9,7 @@ function ExpenseList({ data }: { data: EachExpense[] }) {
       <FlatList
         data={data}
         renderItem={(dataItem) => <ExpenseItem data={dataItem.item} />}
-        keyExtractor={(data) => `${data.id}`}
+        keyExtractor={(data, index) => `${index}`}
       />
     </View>
   );
