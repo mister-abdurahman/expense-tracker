@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { EachExpense, ExpenseContext } from "../../store/context";
 import { formatDate } from "../../utils/formatDate";
 import { createExpense, updateExpense, deleteExpense } from "../../utils/http";
+import LoadingOverlay from "../UI/LoadingOverlay";
 
 interface ExpenseProp {
   amount: { value: string; isValid: boolean };
@@ -21,8 +22,12 @@ function ExpenseForm({
   isEditing: boolean;
   defaultValue?: EachExpense;
 }) {
-  const { updateExpense: updateExpenseLocal, addExpense } =
-    useContext(ExpenseContext);
+  const {
+    updateExpense: updateExpenseLocal,
+    addExpense,
+    isLoading,
+    setIsLoading,
+  } = useContext(ExpenseContext);
   const [inputs, setInputs] = useState({
     amount: {
       value: defaultValue ? `${defaultValue?.amount}` : "",
@@ -41,12 +46,26 @@ function ExpenseForm({
   const navigation = useNavigation();
 
   async function handleUpdateExpense(data: EachExpense) {
-    updateExpenseLocal(data);
-    await updateExpense(data.id, data);
+    try {
+      setIsLoading(true);
+      updateExpenseLocal({ ...data, id: defaultValue?.id });
+      await updateExpense(defaultValue?.id, data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
   async function handleCreateExpense(data: EachExpense) {
-    const id = await createExpense(data); //remote
-    addExpense({ ...data, id }); //local
+    try {
+      setIsLoading(true);
+      const id = await createExpense(data); //remote
+      addExpense({ ...data, id }); //local
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function handleInputChange(inputIdentifier: string, enteredValue?: string) {
@@ -94,6 +113,8 @@ function ExpenseForm({
     !inputs.amount.isValid ||
     !inputs.date.isValid ||
     !inputs.description.isValid;
+
+  if (isLoading) return <LoadingOverlay />;
 
   return (
     <View style={styles.formContainer}>

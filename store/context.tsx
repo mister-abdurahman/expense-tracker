@@ -14,6 +14,10 @@ interface Props {
   removeExpense: (x: string) => void;
   updateExpense: (x: EachExpense) => void;
   setExpensesToRemote: (x: EachExpense[]) => void;
+  isLoading: boolean;
+  setIsLoading: (x: boolean) => void;
+  errorMsg: string;
+  setErrorMsg: (x: string) => void;
 }
 
 export const ExpenseContext = createContext<Props>({
@@ -22,6 +26,10 @@ export const ExpenseContext = createContext<Props>({
   removeExpense: () => null,
   updateExpense: () => null,
   setExpensesToRemote: () => null,
+  isLoading: false,
+  setIsLoading: () => null,
+  errorMsg: "",
+  setErrorMsg: () => null,
 });
 
 export const ExpenseContextProvider = function ({
@@ -30,8 +38,9 @@ export const ExpenseContextProvider = function ({
   children: React.ReactNode;
 }) {
   const [expenses, setExpenses] = useState<EachExpense[]>([]);
-  // console.log(expenses);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  // console.log(expenses);`
   function setExpensesToRemote(expenses: EachExpense[]) {
     const inverted = expenses.reverse();
     setExpenses(inverted);
@@ -57,6 +66,10 @@ export const ExpenseContextProvider = function ({
         removeExpense,
         updateExpense,
         setExpensesToRemote,
+        isLoading,
+        setIsLoading,
+        errorMsg,
+        setErrorMsg,
       }}
     >
       {children}

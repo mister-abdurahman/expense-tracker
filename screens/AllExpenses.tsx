@@ -7,17 +7,30 @@ import { EachExpense, ExpenseContext } from "../store/context";
 import { useContext, useEffect, useLayoutEffect } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { getExpenses } from "../utils/http";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function AllExpenses({ navigation }: { navigation: any }) {
-  const { expenses, setExpensesToRemote } = useContext(ExpenseContext);
+  const {
+    expenses,
+    setExpensesToRemote,
+    setIsLoading,
+    isLoading,
+    errorMsg,
+    setErrorMsg,
+  } = useContext(ExpenseContext);
 
   useEffect(function () {
     async function fetchExpense() {
       try {
+        setIsLoading(true);
         const data = await getExpenses();
         setExpensesToRemote(data);
       } catch (error) {
         console.log(error);
+        setErrorMsg(error?.message);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchExpense();
@@ -37,6 +50,9 @@ function AllExpenses({ navigation }: { navigation: any }) {
   }, []);
 
   const total = expenses.reduce((acc, cur) => acc + cur.amount, 0).toFixed(2);
+
+  if (isLoading) return <LoadingOverlay />;
+  if (errorMsg && !isLoading) return <ErrorOverlay message={errorMsg} />;
 
   return (
     <View style={styles.screen}>

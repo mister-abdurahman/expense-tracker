@@ -8,3 +8,8 @@ export const ExpenseData = [
   new Expense(5, "Trip", new Date("2022-06-01"), 14.66),
   new Expense(6, "Perfume", new Date("2024-07-20"), 14.66),
 ];
+
+// fgbmfi issues:
+// septh 5th to 7th
+// remove "feef from registration
+// adjjust date on footer

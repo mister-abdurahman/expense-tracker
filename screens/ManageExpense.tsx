@@ -6,10 +6,17 @@ import { EachExpense, ExpenseContext } from "../store/context";
 import Button from "../components/UI/Button";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpense } from "../utils/http";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 function ManageExpense({ route, navigation }) {
-  const { expenses, updateExpense, removeExpense, addExpense } =
-    useContext(ExpenseContext);
+  const {
+    expenses,
+    updateExpense,
+    removeExpense,
+    addExpense,
+    isLoading,
+    setIsLoading,
+  } = useContext(ExpenseContext);
   const id = route.params?.id;
 
   const isEditing = !!id;
@@ -23,10 +30,19 @@ function ManageExpense({ route, navigation }) {
   }, []);
 
   async function handleDelete() {
-    await deleteExpense(id);
-    removeExpense(id);
-    navigation.goBack();
+    try {
+      setIsLoading(true);
+      await deleteExpense(id);
+      removeExpense(id);
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
+
+  if (isLoading) return <LoadingOverlay />;
   return (
     <View style={styles.container}>
       <Text style={styles.subHeader}>Your Expense</Text>

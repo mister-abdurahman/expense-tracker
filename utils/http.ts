@@ -25,9 +25,9 @@ export async function getExpenses() {
   }
   return expenses;
 }
-export function updateExpense(id, expenseData) {
+export function updateExpense(id: string, expenseData: EachExpense) {
   axios.put(`${BACKEND_URL}/expenses/${id}.json`, expenseData);
 }
-export function deleteExpense(id) {
+export function deleteExpense(id: string) {
   axios.delete(`${BACKEND_URL}/expenses/${id}.json`);
 }
